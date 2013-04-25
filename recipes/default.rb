@@ -104,6 +104,9 @@ if not Chef::Config.solo
   end
 end
 
+# if no ZK found, add localhost
+zookeeper_pairs = ["localhost"] if zookeeper_pairs.empty?
+
 # append the zookeeper client port (defaults to 2181)
 i = 0
 while i < zookeeper_pairs.size do
