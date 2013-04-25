@@ -1,18 +1,16 @@
 Description
 ===========
 
-Installs kafka 0.7.2
+Installs kafka 0.7.2.
 
-Forked from WebTrends cookbooks but with the following differences:
- - download kafka sources instead of binaries
- - compile the sources
- - doesn't depend on runit cookbook
+Builds kafka from source and runs the broker with runit.
 
 Requirements
 ============
 * Java cookbook version >= 1.5
+* Runit cookbook
 * Zookeeper cookbook - The Kafka cookbook will utilize the clientPort from the Zookeeper cookbook
-  as well as look for a role called "zookeeper" that is applied to nodes. All nodes with the role applied
+  as well as look for a role called "zookeeper_server" that is applied to nodes. All nodes with the role applied
   to them will be used as the Zookeeper quorum that Kafka connects to.
 
 Attributes
@@ -30,6 +28,8 @@ Attributes
 * kafa.log_flush_time_interval - The maximum amount of time (ms) a message can sit in a log before we force a flush
 * kafa.log_flush_scheduler_time_interval - The interval (in ms) at which logs are checked to see if they need to be flushed to disk
 * kafa.log_retention_hours - The minimum age of a log file to be eligible for deletion
+
+See `attributes/default.rb` for others.
 
 Usage
 =====
