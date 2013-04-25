@@ -19,6 +19,7 @@
 
 # == Recipes
 include_recipe "java"
+include_recipe "runit"
 
 java_home   = node['java']['java_home']
 
@@ -110,6 +111,36 @@ while i < zookeeper_pairs.size do
   i += 1
 end
 
+%w[server.properties log4j.properties].each do |template_file|
+  template "#{install_dir}/#{distrib}/config/#{template_file}" do
+    source	"#{template_file}.erb"
+    owner user
+    group group
+    mode  00755
+    variables({
+      :kafka => node[:kafka],
+      :zookeeper_pairs => zookeeper_pairs,
+      :client_port => node[:zookeeper][:client_port]
+    })
+  end
+end
+
+# set up service-control
+template "#{install_dir}/#{distrib}/bin/service-control" do
+  source  "service-control.erb"
+  owner "root"
+  group "root"
+  mode  00755
+  variables({
+    :install_dir => "#{install_dir}/#{distrib}",
+    :log_dir => node[:kafka][:log_dir],
+    :java_home => java_home,
+    :java_jmx_port => node[:kafka][:jmx_port],
+    :java_class => "kafka.Kafka",
+    :user => user
+  })
+end
+
 execute "chmod" do
   command "find #{install_dir} -name bin -prune -o -type f -exec chmod 644 {} \\; && find #{install_dir} -type d -exec chmod 755 {} \\;"
   action :run
@@ -141,5 +172,17 @@ execute "sbt package" do
   action :run 
 end
 
-#TODO : install service script
-#TODO : start service
+# create the runit service
+runit_service "kafka" do
+  options({
+    :log_dir => node[:kafka][:log_dir],
+    :install_dir => "#{install_dir}/#{distrib}",
+    :java_home => java_home,
+    :user => user
+  })
+end
+
+# start up Kafka broker
+service "kafka" do
+  action :start
+end
