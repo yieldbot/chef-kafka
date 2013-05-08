@@ -106,11 +106,12 @@ end
 
 # if no ZK found, add localhost
 zookeeper_pairs = ["localhost"] if zookeeper_pairs.empty?
+zookeeper_port = node[:zookeeper][:client_port] || 2181
 
 # append the zookeeper client port (defaults to 2181)
 i = 0
 while i < zookeeper_pairs.size do
-  zookeeper_pairs[i] = zookeeper_pairs[i].concat(":#{node[:zookeeper][:client_port]}")
+  zookeeper_pairs[i] = zookeeper_pairs[i].concat(":#{zookeeper_port}")
   i += 1
 end
 
