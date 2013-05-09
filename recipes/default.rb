@@ -94,7 +94,7 @@ end
 # grab the zookeeper nodes that are currently available
 zookeeper_pairs = Array.new
 if not Chef::Config.solo
-  zookeeper_pairs = discover_all(:zookeeper, :server).map(&:private_ip).sort
+  zookeeper_pairs = discover_all(:zookeeper, :server, :zk).map(&:private_ip).sort
 end
 
 # if no ZK found, add localhost
