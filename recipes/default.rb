@@ -94,9 +94,7 @@ end
 # grab the zookeeper nodes that are currently available
 zookeeper_pairs = Array.new
 if not Chef::Config.solo
-  search(:node, "role:zookeeper_server AND chef_environment:#{node.chef_environment}").each do |n|
-    zookeeper_pairs << n[:fqdn]
-  end
+  zookeeper_pairs = discover_all(:zookeeper, :server).map(&:private_ip).sort
 end
 
 # if no ZK found, add localhost
@@ -185,3 +183,6 @@ end
 service "kafka" do
   action :start
 end
+
+# announce service
+announce (:kafka, :broker)
