@@ -23,11 +23,6 @@ include_recipe "runit"
 
 java_home   = node['java']['java_home']
 
-java_ark "jdk" do
-  bin_cmds ["java", "javac"]
-  action :install
-end
-
 user = node[:kafka][:user]
 group = node[:kafka][:group]
 
