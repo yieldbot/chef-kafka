@@ -185,4 +185,4 @@ service "kafka" do
 end
 
 # announce service
-announce (:kafka, :broker)
+announce(:kafka, :broker)
