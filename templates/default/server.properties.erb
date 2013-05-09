@@ -20,7 +20,7 @@
 ############################# Server Basics #############################
 
 # The id of the broker. This must be set to a unique integer for each broker.
-brokerid=<%=node["kafka"]["broker_id"]%>
+brokerid=<%=node["kafka"]["broker_id"].to_s()%>
 
 # Hostname the broker will advertise to consumers. If not set, kafka will use the value returned
 # from InetAddress.getLocalHost().  If there are multiple interfaces getLocalHost
