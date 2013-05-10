@@ -17,7 +17,6 @@ end
 # create the runit service
 runit_service "kafka" do
   options({
-    :process_control => "broker"
     :log_dir => node[:kafka][:log_dir],
     :install_dir => "#{install_dir}/#{distrib}",
     :java_home => java_home,
