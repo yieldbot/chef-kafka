@@ -32,6 +32,6 @@ runit_service "mirrormaker" do
 end
 
 # start up mirrormaker
-service "mirromaker" do
+service "mirrormaker" do
   action :start
 end
