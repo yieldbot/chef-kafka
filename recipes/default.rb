@@ -108,7 +108,7 @@ while i < zookeeper_pairs.size do
   i += 1
 end
 
-%w[server.properties log4j.properties].each do |template_file|
+%w[consumer.properties producer.properties server.properties log4j.properties].each do |template_file|
   template "#{install_dir}/#{distrib}/config/#{template_file}" do
     source	"#{template_file}.erb"
     owner user
@@ -120,22 +120,6 @@ end
       :client_port => zookeeper_port
     })
   end
-end
-
-# set up service-control
-template "#{install_dir}/#{distrib}/bin/service-control" do
-  source  "service-control.erb"
-  owner "root"
-  group "root"
-  mode  00755
-  variables({
-    :install_dir => "#{install_dir}/#{distrib}",
-    :log_dir => node[:kafka][:log_dir],
-    :java_home => java_home,
-    :java_jmx_port => node[:kafka][:jmx_port],
-    :java_class => "kafka.Kafka",
-    :user => user
-  })
 end
 
 execute "chmod" do
@@ -169,20 +153,3 @@ execute "sbt package" do
   action :run 
 end
 
-# create the runit service
-runit_service "kafka" do
-  options({
-    :log_dir => node[:kafka][:log_dir],
-    :install_dir => "#{install_dir}/#{distrib}",
-    :java_home => java_home,
-    :user => user
-  })
-end
-
-# start up Kafka broker
-service "kafka" do
-  action :start
-end
-
-# announce service
-announce(:kafka, :broker)

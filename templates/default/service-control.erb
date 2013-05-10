@@ -61,7 +61,7 @@ else
 fi
 
 # Create the JSVC command line.
-CMD="$JAVA $KAFKA_OPTS $JMX_OPTS -cp $CLASSPATH"
+CMD="$JAVA $KAFKA_OPTS $JMX_OPTS -cp $CLASSPATH <%=@kafka_opts || "" %>"
 
 # Find current PID if any.
 FOUND_PID=`ps -ef |grep $MAIN |grep -v grep |awk '{print $2}'`

@@ -22,7 +22,7 @@
 
 # configure brokers statically
 # format: brokerid1:host1:port1,brokerid2:host2:port2 ...
-broker.list=0:localhost:9092
+broker.list=<%= @node[:kafka][:producer_broker_list] %>
 
 # discover brokers from ZK
 #zk.connect=
@@ -43,7 +43,7 @@ producer.type=sync
 compression.codec=0
 
 # message encoder
-serializer.class=kafka.serializer.StringEncoder
+# serializer.class=kafka.serializer.StringEncoder
 
 # allow topic level compression
 #compressed.topics=
