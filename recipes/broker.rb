@@ -1,3 +1,8 @@
+install_dir = node[:kafka][:install_dir]
+distrib = "kafka-#{node[:kafka][:version]}-incubating-src"
+user = node[:kafka][:user]
+java_home   = node['java']['java_home']
+
 # set up service-control
 template "#{install_dir}/#{distrib}/bin/broker-control" do
   source  "service-control.erb"
