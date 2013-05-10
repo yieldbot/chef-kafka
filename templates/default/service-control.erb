@@ -6,7 +6,7 @@ LOG_OUT="<%=File.join(@log_dir,"process.out")%>"
 LOG_ERR="<%=File.join(@log_dir,"process.err")%>"
 HOME_DIR="<%=@install_dir%>"
 JAVA_HOME="<%=@java_home%>"
-SERVER_CONFIG="<%=@install_dir%>/config/server.properties"
+SERVER_CONFIG="<%=@server_config%>"
 
 
 # Setup classpath
@@ -61,7 +61,7 @@ else
 fi
 
 # Create the JSVC command line.
-CMD="$JAVA $KAFKA_OPTS $JMX_OPTS -cp $CLASSPATH <%=@kafka_opts || "" %>"
+CMD="$JAVA $KAFKA_OPTS $JMX_OPTS -cp $CLASSPATH $MAIN $SERVER_CONFIG <%=@kafka_opts || "" %>"
 
 # Find current PID if any.
 FOUND_PID=`ps -ef |grep $MAIN |grep -v grep |awk '{print $2}'`
@@ -71,11 +71,11 @@ case "$1" in
     start)
         if [ "" = "$FOUND_PID" ]; then
             cd   $HOME_DIR
-            echo $CMD $MAIN $SERVER_CONFIG
+            echo $CMD
             # For compatibility with runit we cannot backgroud
             # ourselves with a '&' at the end, though we do
             # need to exec.
-            exec $CMD $MAIN $SERVER_CONFIG >$LOG_OUT 2>$LOG_ERR
+            exec $CMD >$LOG_OUT 2>$LOG_ERR
         else
             echo "Service already running"
             exit 1

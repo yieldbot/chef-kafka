@@ -11,6 +11,7 @@ template "#{install_dir}/#{distrib}/bin/mirrormaker-control" do
   group "root"
   mode  00755
   variables({
+    :server_config => "",
     :install_dir => "#{install_dir}/#{distrib}",
     :log_dir => node[:kafka][:log_dir],
     :kafka_opts => "--consumer.config config/consumer.properties --producer.config config/producer.properties --whitelist=#{node[:kafka][:mirrormaker_whitelist]}",
