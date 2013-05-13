@@ -10,8 +10,8 @@ template "#{install_dir}/#{distrib}/bin/broker-control" do
   group "root"
   mode  00755
   variables({
-    :server_config => "#{install_dir}/config/server.properties",
     :install_dir => "#{install_dir}/#{distrib}",
+    :server_config => "#{install_dir}/#{distrib}/config/server.properties",
     :log_dir => node[:kafka][:log_dir],
     :java_home => java_home,
     :java_jmx_port => node[:kafka][:jmx_port],
