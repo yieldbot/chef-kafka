@@ -30,9 +30,7 @@ if node[:kafka][:broker_id].nil?
 		node.set[:kafka][:broker_id] = node[:facet_index]
 end
 
-if node[:kafka][:broker_host_name].nil?
-		node.set[:kafka][:broker_host_name] = node[:fqdn]
-end
+node.set[:kafka][:broker_host_name] = node[:fqdn]
 
 log "Broker id: #{node[:kafka][:broker_id]}"
 log "Broker name: #{node[:kafka][:broker_host_name]}"
