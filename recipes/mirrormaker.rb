@@ -16,7 +16,7 @@ template "#{install_dir}/#{distrib}/bin/mirrormaker-control" do
     :log_dir => node[:kafka][:log_dir],
     :kafka_opts => "--consumer.config config/consumer.properties --producer.config config/producer.properties --whitelist=#{node[:kafka][:mirrormaker_whitelist]}",
     :java_home => java_home,
-    :java_jmx_port => node[:kafka][:jmx_port],
+    :java_jmx_port => node[:kafka][:mirrormaker][:jmx_port],
     :java_class => "kafka.tools.MirrorMaker",
     :user => user
   })
