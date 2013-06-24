@@ -72,3 +72,8 @@ attribute "kafka/log_retention_hours",
   :display_name => "Kafka Log Retention Hours",
   :description => "The minimum age of a log file to be eligible for deletion",
   :default => "168"
+
+attribute "kafka/log_retention_size",
+  :display_name => "Kafka Log Retention Size",
+  :description => "Segments are pruned from the log as long as the remaining segments don't drop below this",
+  :default => ""

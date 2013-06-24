@@ -101,7 +101,11 @@ log.retention.hours=<%=node["kafka"]["log_retention_hours"]%>
 
 # A size-based retention policy for logs. Segments are pruned from the log as long as the remaining
 # segments don't drop below log.retention.size.
+<% if (node[:kafka][:log_retention_size].nil?) %>
 #log.retention.size=1073741824
+<% else %>
+log.retention.size=<%=node["kafka"]["log_retention_size"]%>
+<% end %>
 
 # The maximum size of a log segment file. When this size is reached a new log segment will be created.
 log.file.size=536870912
