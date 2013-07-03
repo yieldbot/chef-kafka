@@ -38,6 +38,7 @@ default[:kafka][:log_retention_hours] = 168
 default[:kafka][:log_retention_size] = nil
 default[:kafka][:zk_connectiontimeout] = 10000
 default[:kafka][:consumer_groupid] = "test-consumer-group"
+default[:kafka][:producer_type] = "sync"
 default[:kafka][:producer_broker_list] = "0:localhost:9092"
 default[:kafka][:mirrormaker_whitelist] = "\".*\""
 

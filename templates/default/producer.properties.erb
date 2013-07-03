@@ -37,7 +37,7 @@ broker.list=<%= @node[:kafka][:producer_broker_list] %>
 #partitioner.class=
 
 # specifies whether the messages are sent asynchronously (async) or synchronously (sync)
-producer.type=sync
+producer.type=<%= @node[:kafka][:producer_type] %>
 
 # specify the compression codec for all data generated: 0: no compression, 1: gzip
 compression.codec=0
