@@ -48,3 +48,6 @@ default[:kafka][:group] = "kafka"
 default[:kafka][:log4j_logging_level] = "INFO"
 default[:kafka][:jmx_port] = 9999
 default[:kafka][:mirrormaker][:jmx_port] = 9998
+
+# specify non-default cluster, useful for configuring mirror makers
+default[:kafka][:consumer_zk_discover_in] = nil

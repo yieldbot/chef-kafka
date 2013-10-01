@@ -3,6 +3,40 @@ distrib = "kafka-#{node[:kafka][:version]}-incubating-src"
 user = node[:kafka][:user]
 java_home   = node['java']['java_home']
 
+## rewrite consumer properties if this is set
+if default[:kafka][:consumer_zk_discover_in]
+  zookeeper_pairs = Array.new
+  if not Chef::Config.solo
+    zookeeper_pairs = discover_all(:zookeeper, :server,
+                                   default[:kafka][:consumer_zk_discover_in]).map(&:private_hostname).sort
+  end
+
+  # if no ZK found, add localhost
+  zookeeper_pairs = ["localhost"] if zookeeper_pairs.empty?
+  zookeeper_port = (node[:zookeeper] && node[:zookeeper][:client_port]) || 2181
+
+  # append the zookeeper client port (defaults to 2181)
+  i = 0
+  while i < zookeeper_pairs.size do
+    zookeeper_pairs[i] = zookeeper_pairs[i].concat(":#{zookeeper_port}")
+    i += 1
+  end
+end
+
+%w[consumer.properties].each do |template_file|
+  template "#{install_dir}/#{distrib}/config/#{template_file}" do
+    source	"#{template_file}.erb"
+    owner user
+    group group
+    mode  00755
+    variables({
+      :kafka => node[:kafka],
+      :zookeeper_pairs => zookeeper_pairs,
+      :client_port => zookeeper_port
+    })
+  end
+end
+
 
 # set up service-control
 template "#{install_dir}/#{distrib}/bin/mirrormaker-control" do
