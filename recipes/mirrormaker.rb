@@ -4,11 +4,11 @@ user = node[:kafka][:user]
 java_home   = node['java']['java_home']
 
 ## rewrite consumer properties if this is set
-if default[:kafka][:consumer_zk_discover_in]
+if node[:kafka][:consumer_zk_discover_in]
   zookeeper_pairs = Array.new
   if not Chef::Config.solo
     zookeeper_pairs = discover_all(:zookeeper, :server,
-                                   default[:kafka][:consumer_zk_discover_in]).map(&:private_hostname).sort
+                                   node[:kafka][:consumer_zk_discover_in]).map(&:private_hostname).sort
   end
 
   # if no ZK found, add localhost
