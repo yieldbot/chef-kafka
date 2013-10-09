@@ -21,19 +21,20 @@ if node[:kafka][:consumer_zk_discover_in]
     zookeeper_pairs[i] = zookeeper_pairs[i].concat(":#{zookeeper_port}")
     i += 1
   end
-end
 
-%w[consumer.properties].each do |template_file|
-  template "#{install_dir}/#{distrib}/config/#{template_file}" do
-    source	"#{template_file}.erb"
-    owner user
-    group group
-    mode  00755
-    variables({
-      :kafka => node[:kafka],
-      :zookeeper_pairs => zookeeper_pairs,
-      :client_port => zookeeper_port
-    })
+  # rewrite consumer properties file. only ZK should have changed.
+  %w[consumer.properties].each do |template_file|
+    template "#{install_dir}/#{distrib}/config/#{template_file}" do
+      source	"#{template_file}.erb"
+      owner user
+      group group
+      mode  00755
+      variables({
+                  :kafka => node[:kafka],
+                  :zookeeper_pairs => zookeeper_pairs,
+                  :client_port => zookeeper_port
+                })
+    end
   end
 end
 
