@@ -3,7 +3,7 @@ maintainer_email  "rudy.krol@gmail.com"
 license           "Apache 2.0"
 description       "Intalls (download and compile) and configures a Kafka broker"
 long_description  IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version           "1.0"
+version           "1.1"
 
 depends           "java"
 
