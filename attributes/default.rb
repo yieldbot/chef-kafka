@@ -17,7 +17,7 @@
 # limitations under the License.
 
 # Install
-default[:kafka][:version] = "0.7.2"
+default[:kafka][:version] = "0.7.2-incubating"
 default[:kafka][:download_url] = "http://mirrors.ircam.fr/pub/apache/incubator/kafka/kafka-0.7.2-incubating" 
 default[:kafka][:checksum] = "5d2c39a93d0e"
 
@@ -51,3 +51,7 @@ default[:kafka][:mirrormaker][:jmx_port] = 9998
 
 # specify non-default cluster, useful for configuring mirror makers
 default[:kafka][:consumer_zk_discover_in] = nil
+
+# migration tool-specific configuration
+default[:kafka][:migration_tool_whitelist] = "\".*\""
+default[:kafka][:migration_tool_producers] = 10

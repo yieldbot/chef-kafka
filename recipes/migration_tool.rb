@@ -40,7 +40,7 @@ end
 
 
 # set up service-control
-template "#{install_dir}/#{distrib}/bin/mirrormaker-control" do
+template "#{install_dir}/#{distrib}/bin/migration-control" do
   source  "service-control.erb"
   owner "root"
   group "root"
@@ -49,16 +49,15 @@ template "#{install_dir}/#{distrib}/bin/mirrormaker-control" do
     :server_config => "",
     :install_dir => "#{install_dir}/#{distrib}",
     :log_dir => node[:kafka][:log_dir],
-    :kafka_opts => "--consumer.config config/consumer.properties --producer.config config/producer.properties --whitelist=#{node[:kafka][:mirrormaker_whitelist]}",
+    :kafka_opts => "--kafka.07.jar kafka-0.7.19.jar --zkclient.01.jar zkclient-0.2.0.jar --num.producers #{node[:kafka][:migration_tool_producers]} --consumer.config=config/consumer.properties --producer.config=config/producer.properties --whitelist=#{node[:kafka][:mirrormaker_whitelist]}",
     :java_home => java_home,
-    :java_jmx_port => node[:kafka][:mirrormaker][:jmx_port],
-    :java_class => "kafka.tools.MirrorMaker",
+    :java_class => "kafka.tools.KafkaMigrationTool",
     :user => user
   })
 end
 
 # create the runit service
-runit_service "mirrormaker" do
+runit_service "migration_tool" do
   options({
     :log_dir => node[:kafka][:log_dir],
     :install_dir => "#{install_dir}/#{distrib}",
@@ -67,7 +66,7 @@ runit_service "mirrormaker" do
   })
 end
 
-# start up mirrormaker
-service "mirrormaker" do
+# start up migration tool
+service "migration_tool" do
   action :start
 end

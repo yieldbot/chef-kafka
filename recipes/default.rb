@@ -72,7 +72,7 @@ directory node[:kafka][:data_dir] do
   action :create
 end
 
-distrib = "kafka-#{node[:kafka][:version]}-incubating-src"
+distrib = "kafka-#{node[:kafka][:version]}-src"
 tarball = "#{distrib}.tgz"
 download_file = "#{node[:kafka][:download_url]}/#{tarball}"
 
