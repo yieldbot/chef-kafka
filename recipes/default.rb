@@ -32,7 +32,7 @@ end
 
 node.set[:kafka][:broker_host_name] = node[:fqdn]
 
-log "Broker id: #{node[:kafka][:broker_id]}"
+log "Broker id: #{node[:kafka][:broker_id]}"w
 log "Broker name: #{node[:kafka][:broker_host_name]}"
 
 group group do
@@ -75,6 +75,8 @@ end
 distrib = "kafka-#{node[:kafka][:version]}-src"
 tarball = "#{distrib}.tgz"
 download_file = "#{node[:kafka][:download_url]}/#{tarball}"
+
+log "Downloading tar: #{download_file}"
 
 remote_file "#{Chef::Config[:file_cache_path]}/#{tarball}" do
   source download_file
