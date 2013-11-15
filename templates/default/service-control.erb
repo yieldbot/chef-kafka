@@ -10,31 +10,58 @@ SERVER_CONFIG="<%=@server_config%>"
 
 
 # Setup classpath
-for file in $HOME_DIR/project/boot/scala-2.8.0/lib/*.jar;
+# NB commented out, this is from the 0.7 version.
+# for file in $HOME_DIR/project/boot/scala-2.8.0/lib/*.jar;
+# do
+#   CLASSPATH=$CLASSPATH:$file
+# done
+
+# for file in $HOME_DIR/core/target/scala_2.8.0/*.jar;
+# do
+#   CLASSPATH=$CLASSPATH:$file
+# done
+
+# for file in $HOME_DIR/core/lib/*.jar;
+# do
+#   CLASSPATH=$CLASSPATH:$file
+# done
+
+# for file in $HOME_DIR/perf/target/scala_2.8.0/kafka*.jar;
+# do
+#   CLASSPATH=$CLASSPATH:$file
+# done
+
+# for file in $HOME_DIR/core/lib_managed/scala_2.8.0/compile/*.jar;
+# do
+#   if [ ${file##*/} != "sbt-launch.jar" ]; then
+#     CLASSPATH=$CLASSPATH:$file
+#   fi
+# done
+
+base_dir=$(dirname $0)/..
+
+SCALA_VERSION=2.8.0
+
+# assume all dependencies have been packaged into one jar with sbt-assembly's task "assembly-package-dependency"
+for file in $base_dir/core/target/scala-2.8.0/*.jar;
 do
   CLASSPATH=$CLASSPATH:$file
 done
 
-for file in $HOME_DIR/core/target/scala_2.8.0/*.jar;
+for file in $base_dir/perf/target/scala-${SCALA_VERSION}/kafka*.jar;
 do
   CLASSPATH=$CLASSPATH:$file
 done
 
-for file in $HOME_DIR/core/lib/*.jar;
+# classpath addition for release
+for file in $base_dir/libs/*.jar;
 do
   CLASSPATH=$CLASSPATH:$file
 done
 
-for file in $HOME_DIR/perf/target/scala_2.8.0/kafka*.jar;
+for file in $base_dir/kafka*.jar;
 do
   CLASSPATH=$CLASSPATH:$file
-done
-
-for file in $HOME_DIR/core/lib_managed/scala_2.8.0/compile/*.jar;
-do
-  if [ ${file##*/} != "sbt-launch.jar" ]; then
-    CLASSPATH=$CLASSPATH:$file
-  fi
 done
 
 # Add the JMX options.
