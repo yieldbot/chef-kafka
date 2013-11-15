@@ -32,7 +32,7 @@ end
 
 node.set[:kafka][:broker_host_name] = node[:fqdn]
 
-log "Broker id: #{node[:kafka][:broker_id]}"w
+log "Broker id: #{node[:kafka][:broker_id]}"
 log "Broker name: #{node[:kafka][:broker_host_name]}"
 
 group group do
