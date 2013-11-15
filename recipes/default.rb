@@ -153,3 +153,11 @@ execute "sbt package" do
   action :run 
 end
 
+execute "sbt assembly-package-dependency" do
+  user  "root"
+  group "root"
+  command "bash sbt assembly-package-dependency"
+  cwd "#{install_dir}/#{distrib}"
+  action :run
+end
+
