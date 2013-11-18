@@ -4,6 +4,7 @@ user = node[:kafka][:user]
 java_home   = node['java']['java_home']
 extra_lib_dir = "migration_tool_lib"
 
+consumer_7_properties = "consumer7.properties"
 
 ## rewrite consumer properties if this is set
 if node[:kafka][:consumer_zk_discover_in]
@@ -26,18 +27,16 @@ if node[:kafka][:consumer_zk_discover_in]
 
 
   # rewrite consumer properties file. only ZK should have changed.
-  %w[consumer.properties].each do |template_file|
-    template "#{install_dir}/#{distrib}/config/#{template_file}" do
-      source	"#{template_file}.erb"
-      owner user
-      group group
-      mode  00755
-      variables({
-                  :kafka => node[:kafka],
-                  :zookeeper_pairs => zookeeper_pairs,
-                  :client_port => zookeeper_port
-                })
-    end
+  template "#{install_dir}/#{distrib}/config/#{consumer_7_properties}" do
+    source	"consumer.properties.erb"
+    owner user
+    group group
+    mode  00755
+    variables({
+                :kafka => node[:kafka],
+                :zookeeper_pairs => zookeeper_pairs,
+                :client_port => zookeeper_port
+              })
   end
 end
 
@@ -77,7 +76,7 @@ template "#{install_dir}/#{distrib}/bin/migration-control" do
     :server_config => "",
     :install_dir => "#{install_dir}/#{distrib}",
     :log_dir => node[:kafka][:log_dir],
-              :kafka_opts => "--kafka.07.jar #{kafka_7_path} --zkclient.01.jar #{zk_client_path} --num.producers #{node[:kafka][:migration_tool_producers]} --consumer.config=config/consumer.properties --producer.config=config/producer.properties --whitelist=#{node[:kafka][:mirrormaker_whitelist]}",
+              :kafka_opts => "--kafka.07.jar #{kafka_7_path} --zkclient.01.jar #{zk_client_path} --num.producers #{node[:kafka][:migration_tool_producers]} --consumer.config=config/#{consumer_7_properties} --producer.config=config/producer.properties --whitelist=#{node[:kafka][:mirrormaker_whitelist]}",
     :java_home => java_home,
     :java_class => "kafka.tools.KafkaMigrationTool",
     :user => user
