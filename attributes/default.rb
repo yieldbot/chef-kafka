@@ -24,7 +24,6 @@ default[:kafka][:checksum] = "5d2c39a93d0e"
 default[:kafka][:install_dir] = "/opt/kafka"
 default[:kafka][:data_dir] = "/var/kafka"
 default[:kafka][:log_dir] = "/var/log/kafka"
-default[:kafka][:chroot_suffix] = "brokers"
 
 default[:kafka][:num_partitions] = 1
 default[:kafka][:broker_id] = nil
