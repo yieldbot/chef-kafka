@@ -54,3 +54,7 @@ default[:kafka][:consumer_zk_discover_in] = nil
 # migration tool-specific configuration
 default[:kafka][:migration_tool_whitelist] = "\".*\""
 default[:kafka][:migration_tool_producers] = 10
+default[:kafka][:migration_tool_jar_repo_root] = nil
+default[:kafka][:migration_tool_zk_jar] = nil
+default[:kafka][:migration_tool_kafka7_jar] = nil
+
