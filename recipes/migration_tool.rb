@@ -47,7 +47,7 @@ kafka_7_jar = node[:kafka][:migration_tool_kafka7_jar]
 zk_client_path = "#{extra_lib_dir}/#{zk_client_jar}"
 kafka_7_path = "#{extra_lib_dir}/#{kafka_7_jar}"
 
-directory "#{install_dir}/#{extra_lib_dir}" do
+directory "#{install_dir}/#{distrib}/#{extra_lib_dir}" do
   owner "root"
   group "root"
   mode 00755
