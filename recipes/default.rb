@@ -108,6 +108,21 @@ while i < zookeeper_pairs.size do
   i += 1
 end
 
+# similar to above, but for brokers
+broker_pairs = Array.new
+if not Chef::Config.solo
+  broker_pairs = discover_all(:kafka, :broker).map(&:private_hostname).sort
+end
+
+# if no ZK found, add localhost
+broker_pairs = ["localhost"] if broker_pairs.empty?
+
+i = 0
+while i < broker_pairs.size do
+  broker_pairs[i] = broker_pairs[i].concat(":#{node[:kafka][:port]}")
+  i += 1
+end
+
 %w[consumer.properties producer.properties server.properties log4j.properties].each do |template_file|
   template "#{install_dir}/#{distrib}/config/#{template_file}" do
     source	"#{template_file}.erb"
@@ -117,6 +132,7 @@ end
     variables({
       :kafka => node[:kafka],
       :zookeeper_pairs => zookeeper_pairs,
+      :kafka_pairs => kafka_pairs,
       :client_port => zookeeper_port
     })
   end
