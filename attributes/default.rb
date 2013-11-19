@@ -52,6 +52,7 @@ default[:kafka][:mirrormaker][:jmx_port] = 9998
 default[:kafka][:consumer_zk_discover_in] = nil
 
 # migration tool-specific configuration
+default[:kafka][:migration_tool][:jmx_port] = 9997
 default[:kafka][:migration_tool_whitelist] = "\".*\""
 default[:kafka][:migration_tool_producers] = 10
 default[:kafka][:migration_tool_jar_repo_root] = nil
