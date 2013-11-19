@@ -78,7 +78,7 @@ template "#{install_dir}/#{distrib}/bin/migration-control" do
     :log_dir => node[:kafka][:log_dir],
               :kafka_opts => "--kafka.07.jar #{kafka_7_path} --zkclient.01.jar #{zk_client_path} --num.producers #{node[:kafka][:migration_tool_producers]} --consumer.config=config/#{consumer_7_properties} --producer.config=config/producer.properties --whitelist=#{node[:kafka][:migration_tool_whitelist]}",
     :java_home => java_home,
-    :java_jmx_port => node[:kafka][:migration_too][:jmx_port],
+    :java_jmx_port => node[:kafka][:migration_tool][:jmx_port],
     :java_class => "kafka.tools.KafkaMigrationTool",
     :user => user
   })
