@@ -45,7 +45,7 @@ source_root = node[:kafka][:migration_tool_jar_repo_root]
 zk_client_jar = node[:kafka][:migration_tool_zk_jar]
 kafka_7_jar = node[:kafka][:migration_tool_kafka7_jar]
 zk_client_path = "#{extra_lib_dir}/#{zk_client_jar}"
-kafka_7_path = "#{extra_lib_dir}/#{kafka7_path}"
+kafka_7_path = "#{extra_lib_dir}/#{kafka_7_jar}"
 
 directory "#{install_dir}/#{extra_lib_dir}" do
   owner "root"
