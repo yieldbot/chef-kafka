@@ -30,7 +30,7 @@ if node[:kafka][:broker_id].nil?
 		node.set[:kafka][:broker_id] = node[:facet_index]
 end
 
-node.set[:kafka][:broker_host_name] = node[:fqdn]
+node.set[:kafka][:broker_host_name] = node[:fqdn].dup
 
 log "Broker id: #{node[:kafka][:broker_id]}"
 log "Broker name: #{node[:kafka][:broker_host_name]}"
