@@ -38,7 +38,7 @@ default[:kafka][:zk_connectiontimeout] = 10000
 default[:kafka][:zk_chroot] = nil
 default[:kafka][:consumer_groupid] = "test-consumer-group"
 default[:kafka][:producer_type] = "sync"
-default[:kafka][:producer_broker_list] = "0:localhost:9092"
+default[:kafka][:producer_broker_list] = "localhost:9092"
 default[:kafka][:mirrormaker_whitelist] = "\".*\""
 
 default[:kafka][:user] = "kafka"
