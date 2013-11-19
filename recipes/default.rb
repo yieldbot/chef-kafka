@@ -132,7 +132,7 @@ end
     variables({
       :kafka => node[:kafka],
       :zookeeper_pairs => zookeeper_pairs,
-      :kafka_pairs => kafka_pairs,
+      :broker_pairs => broker_pairs,
       :client_port => zookeeper_port
     })
   end
