@@ -114,10 +114,11 @@ if not Chef::Config.solo
   broker_pairs = discover_all(:kafka, :broker).map(&:private_hostname).sort
 end
 
-log "Found brokers: #{broker_pairs}"
 
 # if no ZK found, add localhost
-broker_pairs = ["localhost"] if broker_pairs.empty?
+broker_pairs = [node[:kafka][:broker_host_name]] if broker_pairs.empty?
+
+log "Found brokers: #{broker_pairs}"
 
 i = 0
 while i < broker_pairs.size do
