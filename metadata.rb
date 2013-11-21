@@ -7,7 +7,8 @@ version           "1.1.1"
 
 depends           "java"
 
-recipe	"kafka::default",		"Default configuration for kafka"
+name    "kafka8"
+recipe	"kafka8::default",		"Default configuration for kafka"
 
 %w{ debian ubuntu centos redhat fedora scientific amazon }.each do |os|
   supports os
