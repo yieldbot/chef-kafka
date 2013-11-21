@@ -122,7 +122,7 @@ log "Found brokers: #{broker_pairs}"
 
 i = 0
 while i < broker_pairs.size do
-  broker_pairs[i] = broker_pairs[i].concat(":#{node[:kafka][:port]}")
+  broker_pairs[i] = broker_pairs[i].dup.concat(":#{node[:kafka][:port]}")
   i += 1
 end
 
