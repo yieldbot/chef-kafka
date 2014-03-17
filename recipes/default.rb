@@ -183,4 +183,12 @@ if Gem::Version.new(node[:kafka][:version]) < Gem::Version.new('0.8.1')
     cwd "#{install_dir}/#{distrib}"
     action :run
   end
+else
+    execute "gradle build" do
+    user  "root"
+    group "root"
+    command "bash ./gradlew jar"
+    cwd "#{install_dir}/#{distrib}"
+    action :run
+  end
 end
