@@ -156,27 +156,31 @@ execute "chmod" do
   action :run
 end
 
-execute "sbt update" do
-  user  "root"
-  group "root"
-  command "bash sbt update"
-  cwd "#{install_dir}/#{distrib}"
-  action :run
-end
+# sbt was removed in kafka 0.8.1
+if Gem::Version.new(node[:kafka][:version]) >= Gem::Version.new('0.8.1')
+  log "Building with sbt"
 
-execute "sbt package" do
-  user  "root"
-  group "root"
-  command "bash sbt package"
-  cwd "#{install_dir}/#{distrib}"
-  action :run 
+  execute "sbt update" do
+    user  "root"
+    group "root"
+    command "bash sbt update"
+    cwd "#{install_dir}/#{distrib}"
+    action :run
+  end
+  
+  execute "sbt package" do
+    user  "root"
+    group "root"
+    command "bash sbt package"
+    cwd "#{install_dir}/#{distrib}"
+    action :run 
+  end
+  
+  execute "sbt assembly-package-dependency" do
+    user  "root"
+    group "root"
+    command "bash sbt assembly-package-dependency"
+    cwd "#{install_dir}/#{distrib}"
+    action :run
+  end
 end
-
-execute "sbt assembly-package-dependency" do
-  user  "root"
-  group "root"
-  command "bash sbt assembly-package-dependency"
-  cwd "#{install_dir}/#{distrib}"
-  action :run
-end
-
