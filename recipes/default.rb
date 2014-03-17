@@ -27,7 +27,7 @@ user = node[:kafka][:user]
 group = node[:kafka][:group]
 
 if node[:kafka][:broker_id].nil?
-		node.set[:kafka][:broker_id] = node[:facet_index]
+  node.set[:kafka][:broker_id] = node[:facet_index]
 end
 
 node.set[:kafka][:broker_host_name] = node[:fqdn].dup
@@ -157,7 +157,7 @@ execute "chmod" do
 end
 
 # sbt was removed in kafka 0.8.1
-if Gem::Version.new(node[:kafka][:version]) >= Gem::Version.new('0.8.1')
+if Gem::Version.new(node[:kafka][:version]) < Gem::Version.new('0.8.1')
   log "Building with sbt"
 
   execute "sbt update" do
@@ -167,15 +167,15 @@ if Gem::Version.new(node[:kafka][:version]) >= Gem::Version.new('0.8.1')
     cwd "#{install_dir}/#{distrib}"
     action :run
   end
-  
+
   execute "sbt package" do
     user  "root"
     group "root"
     command "bash sbt package"
     cwd "#{install_dir}/#{distrib}"
-    action :run 
+    action :run
   end
-  
+
   execute "sbt assembly-package-dependency" do
     user  "root"
     group "root"
