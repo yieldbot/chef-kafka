@@ -19,7 +19,7 @@ if node[:kafka][:consumer_zk_discover_in]
   # append the zookeeper client port (defaults to 2181)
   i = 0
   while i < zookeeper_pairs.size do
-    zookeeper_pairs[i] = zookeeper_pairs[i].concat(":#{zookeeper_port}#{zookeeper_chroot}")
+    zookeeper_pairs[i] = zookeeper_pairs[i].concat(":#{zookeeper_port}")
     i += 1
   end
 
@@ -33,6 +33,7 @@ if node[:kafka][:consumer_zk_discover_in]
       variables({
                   :kafka => node[:kafka],
                   :zookeeper_pairs => zookeeper_pairs,
+                  :zookeeper_chroot => zookeeper_chroot,
                   :client_port => zookeeper_port
                 })
     end
