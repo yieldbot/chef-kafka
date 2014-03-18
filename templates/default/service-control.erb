@@ -110,7 +110,7 @@ if [ "x$GC_LOG_ENABLED" = "xtrue" ]; then
 fi
 
 # Create the JSVC command line.
-CMD="$JAVA $KAFKA_OPTS $JMX_OPTS -cp $CLASSPATH $MAIN $SERVER_CONFIG <%=@kafka_opts || "" %>"
+
 
 # Find current PID if any.
 FOUND_PID=`ps -ef |grep $MAIN |grep -v grep |awk '{print $2}'`
@@ -120,11 +120,10 @@ case "$1" in
     start)
         if [ "" = "$FOUND_PID" ]; then
             cd   $HOME_DIR
-            echo $CMD
             # For compatibility with runit we cannot backgroud
             # ourselves with a '&' at the end, though we do
             # need to exec.
-            exec $JAVA $KAFKA_HEAP_OPTS $KAFKA_JVM_PERFORMANCE_OPTS $KAFKA_GC_LOG_OPTS $KAFKA_JMX_OPTS $KAFKA_LOG4J_OPTS -cp $CLASSPATH $KAFKA_OPTS $MAIN $SERVER_CONFIG
+            exec $JAVA $KAFKA_HEAP_OPTS $KAFKA_JVM_PERFORMANCE_OPTS $KAFKA_GC_LOG_OPTS $KAFKA_JMX_OPTS $KAFKA_LOG4J_OPTS -cp $CLASSPATH $KAFKA_OPTS $MAIN $SERVER_CONFIG <%=@kafka_opts || "" %>
         else
             echo "Service already running"
             exit 1
