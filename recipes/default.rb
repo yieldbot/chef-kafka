@@ -147,7 +147,7 @@ execute "chmod" do
 end
 
 execute "chown" do
-  command "chown -R root:root #{install_dir}"
+  command "chown -R #{user}:#{group} #{install_dir}"
   action :run
 end
 
