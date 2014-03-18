@@ -127,3 +127,4 @@ zookeeper.connect=<%= @zookeeper_pairs.join(",") + (node[:kafka][:zk_chroot] ? n
 
 # Timeout in ms for connecting to zookeeper
 zookeeper.connection.timeout.ms=<%= node[:kafka][:zk_connectiontimeout] %>
+replica.fetch.max.bytes=<%=node["kafka"]["replica_fetch_max_bytes"]%>
