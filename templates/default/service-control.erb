@@ -8,47 +8,45 @@ HOME_DIR="<%=@install_dir%>"
 JAVA_HOME="<%=@java_home%>"
 SERVER_CONFIG="<%=@server_config%>"
 
-
-# Setup classpath
-# NB commented out, this is from the 0.7 version.
-# for file in $HOME_DIR/project/boot/scala-2.8.0/lib/*.jar;
-# do
-#   CLASSPATH=$CLASSPATH:$file
-# done
-
-# for file in $HOME_DIR/core/target/scala_2.8.0/*.jar;
-# do
-#   CLASSPATH=$CLASSPATH:$file
-# done
-
-# for file in $HOME_DIR/core/lib/*.jar;
-# do
-#   CLASSPATH=$CLASSPATH:$file
-# done
-
-# for file in $HOME_DIR/perf/target/scala_2.8.0/kafka*.jar;
-# do
-#   CLASSPATH=$CLASSPATH:$file
-# done
-
-# for file in $HOME_DIR/core/lib_managed/scala_2.8.0/compile/*.jar;
-# do
-#   if [ ${file##*/} != "sbt-launch.jar" ]; then
-#     CLASSPATH=$CLASSPATH:$file
-#   fi
-# done
-
 base_dir=$(dirname $0)/..
 
-SCALA_VERSION=2.8.0
+# create logs directory
+LOG_DIR=$base_dir/logs
+if [ ! -d $LOG_DIR ]; then
+	mkdir $LOG_DIR
+fi
 
-# assume all dependencies have been packaged into one jar with sbt-assembly's task "assembly-package-dependency"
-for file in $base_dir/core/target/scala-2.8.0/*.jar;
+if [ -z "$SCALA_VERSION" ]; then
+	SCALA_VERSION=2.8.0
+fi
+
+# run ./gradlew copyDependantLibs to get all dependant jars in a local dir
+for file in $base_dir/core/build/dependant-libs-${SCALA_VERSION}/*.jar;
 do
   CLASSPATH=$CLASSPATH:$file
 done
 
-for file in $base_dir/perf/target/scala-${SCALA_VERSION}/kafka*.jar;
+for file in $base_dir/perf/build/libs//kafka-perf_${SCALA_VERSION}*.jar;
+do
+  CLASSPATH=$CLASSPATH:$file
+done
+
+for file in $base_dir/clients/build/libs//kafka-clients*.jar;
+do
+  CLASSPATH=$CLASSPATH:$file
+done
+
+for file in $base_dir/examples/build/libs//kafka-examples*.jar;
+do
+  CLASSPATH=$CLASSPATH:$file
+done
+
+for file in $base_dir/contrib/hadoop-consumer/build/libs//kafka-hadoop-consumer*.jar;
+do
+  CLASSPATH=$CLASSPATH:$file
+done
+
+for file in $base_dir/contrib/hadoop-producer/build/libs//kafka-hadoop-producer*.jar;
 do
   CLASSPATH=$CLASSPATH:$file
 done
@@ -59,32 +57,56 @@ do
   CLASSPATH=$CLASSPATH:$file
 done
 
-for file in $base_dir/kafka*.jar;
+for file in $base_dir/core/build/libs/kafka_${SCALA_VERSION}*.jar;
 do
   CLASSPATH=$CLASSPATH:$file
 done
 
-# Add the JMX options.
-if [ -z "$JMX_OPTS"]; then
-    JMX_OPTS="-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false "
+# JMX settings
+if [ -z "$KAFKA_JMX_OPTS" ]; then
+  KAFKA_JMX_OPTS="-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false  -Dcom.sun.management.jmxremote.ssl=false "
 fi
 
-# Add the JMX port.
-if [ -z "$JMX_PORT" ]; then
-    JMX_PORT="<%=@java_jmx_port%>"
+# JMX port to use
+if [  $JMX_PORT ]; then
+  KAFKA_JMX_OPTS="$KAFKA_JMX_OPTS -Dcom.sun.management.jmxremote.port=$JMX_PORT "
 fi
 
-# Add JMX options and port together.
-JMX_OPTS="$JMX_OPTS -Dcom.sun.management.jmxremote.port=$JMX_PORT "
+# Log4j settings
+if [ -z "$KAFKA_LOG4J_OPTS" ]; then
+  KAFKA_LOG4J_OPTS="-Dlog4j.configuration=file:$base_dir/config/tools-log4j.properties"
+fi
 
+KAFKA_LOG4J_OPTS="-Dkafka.logs.dir=$LOG_DIR $KAFKA_LOG4J_OPTS"
+
+# Generic jvm settings you want to add
 if [ -z "$KAFKA_OPTS" ]; then
-  KAFKA_OPTS="-Xmx512M -server -Djava.net.preferIPv4Stack=true -Dlog4j.configuration=file:$HOME_DIR/config/log4j.properties"
+  KAFKA_OPTS=""
 fi
 
+# Which java to use
 if [ -z "$JAVA_HOME" ]; then
   JAVA="java"
 else
   JAVA="$JAVA_HOME/bin/java"
+fi
+
+# Memory options
+if [ -z "$KAFKA_HEAP_OPTS" ]; then
+  KAFKA_HEAP_OPTS="-Xmx256M"
+fi
+
+# JVM performance options
+if [ -z "$KAFKA_JVM_PERFORMANCE_OPTS" ]; then
+  KAFKA_JVM_PERFORMANCE_OPTS="-server -XX:+UseCompressedOops -XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:+CMSClassUnloadingEnabled -XX:+CMSScavengeBeforeRemark -XX:+DisableExplicitGC -Djava.awt.headless=true"
+fi
+
+# GC options
+GC_FILE_SUFFIX='-gc.log'
+GC_LOG_FILE_NAME=''
+if [ "x$GC_LOG_ENABLED" = "xtrue" ]; then
+  GC_LOG_FILE_NAME=$DAEMON_NAME$GC_FILE_SUFFIX
+  KAFKA_GC_LOG_OPTS="-Xloggc:$LOG_DIR/$GC_LOG_FILE_NAME -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintGCTimeStamps "
 fi
 
 # Create the JSVC command line.
@@ -102,7 +124,7 @@ case "$1" in
             # For compatibility with runit we cannot backgroud
             # ourselves with a '&' at the end, though we do
             # need to exec.
-            exec $CMD >$LOG_OUT 2>$LOG_ERR
+            exec $JAVA $KAFKA_HEAP_OPTS $KAFKA_JVM_PERFORMANCE_OPTS $KAFKA_GC_LOG_OPTS $KAFKA_JMX_OPTS $KAFKA_LOG4J_OPTS -cp $CLASSPATH $KAFKA_OPTS "$@"
         else
             echo "Service already running"
             exit 1
