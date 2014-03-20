@@ -41,6 +41,7 @@ default[:kafka][:producer_type] = "sync"
 default[:kafka][:producer_broker_list] = "localhost:9092"
 default[:kafka][:mirrormaker_whitelist] = "\".*\""
 default[:kafka][:replica_fetch_max_bytes] = 104857600
+default[:kafka][:default_replication_factor] = 1
 
 default[:kafka][:user] = "kafka"
 default[:kafka][:group] = "kafka"
