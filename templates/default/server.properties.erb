@@ -25,7 +25,7 @@ broker.id=<%=node["kafka"]["broker_id"].to_s()%>
 # Hostname the broker will advertise to consumers. If not set, kafka will use the value returned
 # from InetAddress.getLocalHost().  If there are multiple interfaces getLocalHost
 # may not be what you want.
-<% if node[:kafka][:broker_host_name].nil? || node[:kafka][:broker_host_name].empty? %>
+<% if node[:kafka][:broker_host_name].nil? || node[:kafka][:broker_host_name].empty? ||  node[:kafka][:absent_broker_host_name]%>
 #hostname
 <% else %>
 host.name=<%=node[:kafka][:broker_host_name]%>

@@ -28,6 +28,7 @@ default[:kafka][:log_dir] = "/var/log/kafka"
 default[:kafka][:num_partitions] = 1
 default[:kafka][:broker_id] = nil
 default[:kafka][:broker_host_name] = nil
+default[:kafka][:absent_broker_host_name] = false
 default[:kafka][:broker_advertised_host_name] = nil
 
 default[:kafka][:port] = 9092
