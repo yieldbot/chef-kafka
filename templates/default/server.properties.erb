@@ -31,7 +31,7 @@ broker.id=<%=node["kafka"]["broker_id"].to_s()%>
 host.name=<%=node[:kafka][:broker_host_name]%>
 <% end %>
 
-<% if not node[:kafka][:advertised_broker_host_name].nil? %>
+<% if not node[:kafka][:broker_advertised_host_name].nil? %>
 advertised.host.name=<%=node["kafka"]["advertised_broker_host_name"]%>
 <% end %>
 
