@@ -28,7 +28,10 @@ default[:kafka][:log_dir] = "/var/log/kafka"
 default[:kafka][:num_partitions] = 1
 default[:kafka][:broker_id] = nil
 default[:kafka][:broker_host_name] = nil
+default[:kafka][:broker_advertised_host_name] = nil
+
 default[:kafka][:port] = 9092
+default[:kafka][:advertised_port] = nil
 default[:kafka][:log_flush_interval] = 10000
 default[:kafka][:log_flush_time_interval] = 1000
 default[:kafka][:log_flush_scheduler_time_interval] = 1000

@@ -31,10 +31,18 @@ broker.id=<%=node["kafka"]["broker_id"].to_s()%>
 host.name=<%=node[:kafka][:broker_host_name]%>
 <% end %>
 
+<% if not node[:kafka][:advertised_broker_host_name].nil? %>
+advertised.host.name=<%=node["kafka"]["advertised_broker_host_name"]%>
+<% end %>
+
 ############################# Socket Server Settings #############################
 
 # The port the socket server listens on
 port=<%=node["kafka"]["port"]%>
+<% if not node[:kafka][:advertised_port].nil? %>
+advertised.port=<%=node["kafka"]["advertised_port"]%>
+<% end %>
+
 
 # The number of processor threads the socket server uses for receiving and answering requests. 
 # Defaults to the number of cores on the machine
