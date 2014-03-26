@@ -21,8 +21,12 @@
 # need to set either broker.list or zk.connect
 
 # configure brokers statically
-# format: brokerid1:host1:port1,brokerid2:host2:port2 ...
+<% if node[:kafka][:producer_broker_list].nil?%>
 metadata.broker.list=<%= @broker_pairs.join(",") %>
+<% else %>
+metadata.broker.list=<%= @node[:kafka][:producer_broker_list] %>
+<% end %>
+
 
 # discover brokers from ZK
 #zk.connect=
