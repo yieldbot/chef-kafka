@@ -23,7 +23,7 @@
 zookeeper.connect=<%= @zookeeper_pairs.join(",") + (@zookeeper_chroot || "") %>
 
 # timeout in ms for connecting to zookeeper
-zk.connectiontimeout.ms=1000000
+zookeeper.connection.timeout.ms=1000000
 
 #consumer group id
 group.id=<%= @node[:kafka][:consumer_groupid] %>
