@@ -50,7 +50,7 @@ if node[:kafka][:producer_zk_discover_in]
   # if no ZK found, add localhost
   zookeeper_pairs = ["localhost"] if zookeeper_pairs.empty?
   zookeeper_port = (node[:zookeeper] && node[:zookeeper][:client_port]) || 2181
-  zookeeper_chroot = node[:kafka][:mirrormaker][:zk_chroot]
+  zookeeper_chroot = node[:kafka][:mirrormaker][:producer_zk_chroot] || node[:kafka][:mirrormaker][:zk_chroot]
 
   # append the zookeeper client port (defaults to 2181)
   i = 0
