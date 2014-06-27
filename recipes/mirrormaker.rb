@@ -1,4 +1,4 @@
-install_dir = node[:kafka][:install_dir]
+dir_installf = node[:kafka][:install_dir]
 distrib = "kafka-#{node[:kafka][:version]}-src"
 user = node[:kafka][:user]
 java_home   = node['java']['java_home']
@@ -25,6 +25,42 @@ if node[:kafka][:consumer_zk_discover_in]
 
   # rewrite consumer properties file. only ZK should have changed.
   %w[consumer.properties].each do |template_file|
+    template "#{install_dir}/#{distrib}/config/#{template_file}" do
+      source	"#{template_file}.erb"
+      owner user
+      group group
+      mode  00755
+      variables({
+                  :kafka => node[:kafka],
+                  :zookeeper_pairs => zookeeper_pairs,
+                  :zookeeper_chroot => zookeeper_chroot,
+                  :client_port => zookeeper_port
+                })
+    end
+  end
+end
+
+if node[:kafka][:producer_zk_discover_in]
+  zookeeper_pairs = Array.new
+  if not Chef::Config.solo
+    zookeeper_pairs = discover_all(:zookeeper, :server,
+                                   node[:kafka][:producer_zk_discover_in]).map(&:private_hostname).sort
+  end
+
+  # if no ZK found, add localhost
+  zookeeper_pairs = ["localhost"] if zookeeper_pairs.empty?
+  zookeeper_port = (node[:zookeeper] && node[:zookeeper][:client_port]) || 2181
+  zookeeper_chroot = node[:kafka][:mirrormaker][:zk_chroot]
+
+  # append the zookeeper client port (defaults to 2181)
+  i = 0
+  while i < zookeeper_pairs.size do
+    zookeeper_pairs[i] = zookeeper_pairs[i].concat(":#{zookeeper_port}")
+    i += 1
+  end
+
+  # rewrite producer properties file. only ZK should have changed.
+  %w[producer.properties].each do |template_file|
     template "#{install_dir}/#{distrib}/config/#{template_file}" do
       source	"#{template_file}.erb"
       owner user
