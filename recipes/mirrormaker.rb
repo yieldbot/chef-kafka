@@ -1,4 +1,4 @@
-dir_installf = node[:kafka][:install_dir]
+install_dir = node[:kafka][:install_dir]
 distrib = "kafka-#{node[:kafka][:version]}-src"
 user = node[:kafka][:user]
 java_home   = node['java']['java_home']
