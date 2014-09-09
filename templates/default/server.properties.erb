@@ -32,7 +32,7 @@ host.name=<%=node[:kafka][:broker_host_name]%>
 <% end %>
 
 <% if not node[:kafka][:broker_advertised_host_name].nil? %>
-advertised.host.name=<%=node["kafka"]["broker_advertised_host_name"]%>
+advertised.host.name=<%=node["kafka"]["broker_advertised_host_name"] || node[:kafka][:broker_host_name]%>
 <% end %>
 
 ############################# Socket Server Settings #############################
