@@ -31,8 +31,10 @@ broker.id=<%=node["kafka"]["broker_id"].to_s()%>
 host.name=<%=node[:kafka][:broker_host_name]%>
 <% end %>
 
-<% if not node[:kafka][:broker_advertised_host_name].nil? %>
-advertised.host.name=<%=node["kafka"]["broker_advertised_host_name"] || node[:kafka][:broker_host_name]%>
+<% if node[:kafka][:broker_advertised_host_name].is_a?(String) %>
+advertised.host.name=<%=node[:kafka][:broker_advertised_host_name]%>
+<% else %>
+advertised.host.name=<%=node[:kafka][:broker_host_name]%>
 <% end %>
 
 ############################# Socket Server Settings #############################
