@@ -30,6 +30,7 @@ default[:kafka][:broker_id] = nil
 default[:kafka][:broker_host_name] = nil
 default[:kafka][:absent_broker_host_name] = false
 default[:kafka][:broker_advertised_host_name] = nil
+default[:kafka][:heap_opts] = "-Xmx256M"
 
 default[:kafka][:port] = 9092
 default[:kafka][:advertised_port] = nil

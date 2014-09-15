@@ -80,7 +80,8 @@ template "#{install_dir}/#{distrib}/bin/migration-control" do
     :java_home => java_home,
     :java_jmx_port => node[:kafka][:migration_tool][:jmx_port],
     :java_class => "kafka.tools.KafkaMigrationTool",
-    :user => user
+    :user => user,
+    :heap_opts => node[:kafka][:heap_opts]
   })
 end
 

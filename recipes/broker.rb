@@ -16,7 +16,8 @@ template "#{install_dir}/#{distrib}/bin/broker-control" do
     :java_home => java_home,
     :java_jmx_port => node[:kafka][:jmx_port],
     :java_class => "kafka.Kafka",
-    :user => user
+    :user => user,
+    :heap_opts => node[:kafka][:heap_opts]
   })
 end
 

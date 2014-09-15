@@ -91,7 +91,8 @@ template "#{install_dir}/#{distrib}/bin/mirrormaker-control" do
     :java_home => java_home,
     :java_jmx_port => node[:kafka][:mirrormaker][:jmx_port],
     :java_class => "kafka.tools.MirrorMaker",
-    :user => user
+    :user => user,
+    :heap_opts => node[:kafka][:heap_opts]
   })
 end
 
