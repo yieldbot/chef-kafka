@@ -6,6 +6,7 @@ long_description  IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version           "1.1.1"
 
 depends           "java"
+depends 'runit', '~> 0.14.0'
 
 name    "kafka8"
 recipe	"kafka8::default",		"Default configuration for kafka"
