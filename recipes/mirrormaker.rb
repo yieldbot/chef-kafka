@@ -58,6 +58,22 @@ if node[:kafka][:producer_zk_discover_in]
     zookeeper_pairs[i] = zookeeper_pairs[i].concat(":#{zookeeper_port}")
     i += 1
   end
+  
+  broker_pairs = Array.new
+if not Chef::Config.solo
+  broker_pairs = discover_all(:kafka, :broker).map(&:private_hostname).sort
+end
+
+
+  broker_pairs = [node[:kafka][:broker_host_name]] if broker_pairs.empty?
+
+  log "Found brokers: #{broker_pairs}"
+
+  i = 0
+  while i < broker_pairs.size do
+    broker_pairs[i] = broker_pairs[i].dup.concat(":#{node[:kafka][:port]}")
+    i += 1
+  end
 
   # rewrite producer properties file. only ZK should have changed.
   %w[producer.properties].each do |template_file|
@@ -68,6 +84,7 @@ if node[:kafka][:producer_zk_discover_in]
       mode  00755
       variables({
                   :kafka => node[:kafka],
+                  :broker_pairs => broker_pairs,
                   :zookeeper_pairs => zookeeper_pairs,
                   :zookeeper_chroot => zookeeper_chroot,
                   :client_port => zookeeper_port
