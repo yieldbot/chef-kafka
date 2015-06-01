@@ -3,10 +3,6 @@ distrib = "kafka-#{node[:kafka][:version]}-src"
 user = node[:kafka][:user]
 java_home   = node['java']['java_home']
 
-# explicit announce of mirrormake service, so that brokers do not add mm in their producer.properties
-# if mm and broker service are running on the same host, also announce it early on, so that this recipe
-# does not add itself to the broker_list
-announce(:kafka, :mirrormaker)
 
 ## rewrite consumer properties if this is set
 if node[:kafka][:consumer_zk_discover_in]
@@ -64,21 +60,6 @@ if node[:kafka][:producer_zk_discover_in]
     i += 1
   end
 
-  broker_pairs = Array.new
-if not Chef::Config.solo
-  broker_pairs = discover_all(:kafka, :broker).map(&:private_hostname).sort
-end
-
-
-  broker_pairs = [node[:kafka][:broker_host_name]] if broker_pairs.empty?
-
-  log "Found brokers: #{broker_pairs}"
-
-  i = 0
-  while i < broker_pairs.size do
-    broker_pairs[i] = broker_pairs[i].dup.concat(":#{node[:kafka][:port]}")
-    i += 1
-  end
 
   # rewrite producer properties file. only ZK should have changed.
   %w[producer.properties].each do |template_file|
@@ -89,7 +70,6 @@ end
       mode  00755
       variables({
                   :kafka => node[:kafka],
-                  :broker_pairs => broker_pairs,
                   :zookeeper_pairs => zookeeper_pairs,
                   :zookeeper_chroot => zookeeper_chroot,
                   :client_port => zookeeper_port
