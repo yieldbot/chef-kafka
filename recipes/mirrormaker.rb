@@ -3,6 +3,11 @@ distrib = "kafka-#{node[:kafka][:version]}-src"
 user = node[:kafka][:user]
 java_home   = node['java']['java_home']
 
+# explicit announce of mirrormake service, so that brokers do not add mm in their producer.properties
+# if mm and broker service are running on the same host, also announce it early on, so that this recipe
+# does not add itself to the broker_list
+announce(:kafka, :mirrormaker)
+
 ## rewrite consumer properties if this is set
 if node[:kafka][:consumer_zk_discover_in]
   zookeeper_pairs = Array.new
@@ -58,7 +63,7 @@ if node[:kafka][:producer_zk_discover_in]
     zookeeper_pairs[i] = zookeeper_pairs[i].concat(":#{zookeeper_port}")
     i += 1
   end
-  
+
   broker_pairs = Array.new
 if not Chef::Config.solo
   broker_pairs = discover_all(:kafka, :broker).map(&:private_hostname).sort
