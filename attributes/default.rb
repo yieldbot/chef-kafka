@@ -57,6 +57,8 @@ default[:kafka][:mirrormaker][:jmx_port] = 9998
 default[:kafka][:mirrormaker][:zk_chroot] = ''
 default[:kafka][:mirrormaker][:producer_zk_chroot] = nil
 
+default[:kafka][:producer][:metadata_broker_list] = nil
+
 # specify non-default cluster, useful for configuring mirror makers
 default[:kafka][:consumer_zk_discover_in] = nil
 default[:kafka][:producer_zk_discover_in] = nil
