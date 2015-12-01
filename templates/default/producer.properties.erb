@@ -47,6 +47,8 @@ metadata.broker.list=<%= node[:kafka][:producer][:metadata_broker_list] %>
 # specifies whether the messages are sent asynchronously (async) or synchronously (sync)
 producer.type=<%= @node[:kafka][:producer_type] %>
 
+topic.metadata.refresh.interval.ms=<%= @node[:kafka][:producer_refresh_interval] %>
+
 # specify the compression codec for all data generated: 0: no compression, 1: gzip
 compression.codec=0
 
@@ -61,10 +63,10 @@ compression.codec=0
 
 
 ############################# Async Producer #############################
-# maximum time, in milliseconds, for buffering data on the producer queue 
+# maximum time, in milliseconds, for buffering data on the producer queue
 #queue.time=
 
-# the maximum size of the blocking queue for buffering on the producer 
+# the maximum size of the blocking queue for buffering on the producer
 #queue.size=
 
 # Timeout for event enqueue:
@@ -73,18 +75,17 @@ compression.codec=0
 # +ve: enqueue will block up to this many milliseconds if the queue is full
 #queue.enqueueTimeout.ms=
 
-# the number of messages batched at the producer 
+# the number of messages batched at the producer
 #batch.size=
 
-# the callback handler for one or multiple events 
+# the callback handler for one or multiple events
 #callback.handler=
 
-# properties required to initialize the callback handler 
+# properties required to initialize the callback handler
 #callback.handler.props=
 
-# the handler for events 
+# the handler for events
 #event.handler=
 
-# properties required to initialize the event handler 
+# properties required to initialize the event handler
 #event.handler.props=
-

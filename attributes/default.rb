@@ -18,7 +18,7 @@
 
 # Install
 default[:kafka][:version] = "0.7.2-incubating"
-default[:kafka][:download_url] = "http://mirrors.ircam.fr/pub/apache/incubator/kafka/kafka-0.7.2-incubating" 
+default[:kafka][:download_url] = "http://mirrors.ircam.fr/pub/apache/incubator/kafka/kafka-0.7.2-incubating"
 default[:kafka][:checksum] = "5d2c39a93d0e"
 
 default[:kafka][:install_dir] = "/opt/kafka"
@@ -43,6 +43,7 @@ default[:kafka][:zk_connectiontimeout] = 10000
 default[:kafka][:zk_chroot] = nil
 default[:kafka][:consumer_groupid] = "test-consumer-group"
 default[:kafka][:producer_type] = "sync"
+default[:kafka][:producer_refresh_interval] = 120000
 default[:kafka][:producer_broker_list] = nil
 default[:kafka][:mirrormaker_whitelist] = "\".*\""
 default[:kafka][:replica_fetch_max_bytes] = 104857600
@@ -70,4 +71,3 @@ default[:kafka][:migration_tool_producers] = 10
 default[:kafka][:migration_tool_jar_repo_root] = nil
 default[:kafka][:migration_tool_zk_jar] = nil
 default[:kafka][:migration_tool_kafka7_jar] = nil
-
